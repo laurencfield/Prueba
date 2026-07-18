@@ -1,319 +1,228 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-Calculadora de Créditos Colombia (V2.0)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
+    <title>Vila Senses | Velas Artesanales & Piezas Decorativas</title>
+    <!-- Tailwind CSS para un diseño rápido, limpio y moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'vila-crema': '#FDFBF7',
+                        'vila-tierra': '#D4C5B9',
+                        'vila-oscuro': '#2C2A29',
+                        'vila-acento': '#8C7A6B',
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
         }
-        body {
-            background-color: #0f172a;
-            color: #f1f5f9;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1100px;
-            margin: 0 auto;
-            background: #1e293b;
-            padding: 35px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            border: 1px solid #334155;
-        }
-        header {
-            text-align: center;
-            margin-bottom: 35px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 25px;
-        }
-        h1 { color: #38bdf8; font-size: 28px; margin-bottom: 8px; }
-        p.subtitle { color: #94a3b8; font-size: 14px; }
-        .badge {
-            background: #0284c7;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            vertical-align: middle;
-            margin-left: 8px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 35px;
-        }
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-        .form-group {
-            margin-bottom: 22px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #94a3b8;
-            font-size: 14px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #475569;
-            border-radius: 8px;
-            font-size: 15px;
-            background-color: #0f172a;
-            color: white;
-            transition: all 0.3s;
-        }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
-        }
-        .results-box {
-            background-color: #0f172a;
-            border-radius: 12px;
-            padding: 25px;
-            border-top: 4px solid #38bdf8;
-        }
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 14px 0;
-            border-bottom: 1px solid #334155;
-        }
-        .result-item:last-child { border-bottom: none; }
-        .result-label { font-weight: 500; color: #94a3b8; }
-        .result-value { font-weight: 700; color: #f8fafc; font-size: 18px; }
-        .highlight { color: #34d399; font-size: 22px; }
-        .info-card {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 20px;
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.6;
-        }
-        .tabs-container {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: #0f172a;
-            padding: 6px;
-            border-radius: 8px;
-        }
-        .tab-btn {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: #94a3b8;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s;
-        }
-        .tab-btn.active {
-            background: #38bdf8;
-            color: #0f172a;
-        }
-    </style>
+    </script>
+    <!-- Fuentes elegantes de Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Simulador Multicrédito Colombiano <span class="badge">V2.0 PRO</span></h1>
-            <p class="subtitle">Simulación avanzada: Vivienda, Vehículo, Consumo y Tarjetas con tasas de usura y seguros estimados</p>
-        </header>
+<body class="bg-vila-crema text-vila-oscuro font-sans antialiased">
 
-        <div class="tabs-container">
-            <button class="tab-btn active" onclick="cambiarTipo('hipotecario')">🏠 Hipotecario / Leasing</button>
-            <button class="tab-btn" onclick="cambiarTipo('vehiculo')">🚗 Vehículo</button>
-            <button class="tab-btn" onclick="cambiarTipo('libre')">💰 Libre Inversión</button>
-            <button class="tab-btn" onclick="cambiarTipo('tarjeta')">💳 Tarjeta de Crédito</button>
+    <!-- Navbar -->
+    <header class="fixed w-full bg-vila-crema/80 backdrop-blur-md z-50 border-b border-vila-tierra/20">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <a href="#" class="font-serif text-2xl tracking-widest uppercase font-semibold">Vila Senses</a>
+            <nav class="hidden md:flex space-x-8 text-sm uppercase tracking-wider font-medium">
+                <a href="#colecciones" class="hover:text-vila-acento transition-colors">Colecciones</a>
+                <a href="#usos" class="hover:text-vila-acento transition-colors">Momentos</a>
+                <a href="#nosotros" class="hover:text-vila-acento transition-colors">El Arte</a>
+            </nav>
+            <a href="#contacto" class="bg-vila-oscuro text-vila-crema px-6 py-2.5 text-sm uppercase tracking-wider font-medium hover:bg-vila-acento transition-all duration-300 rounded-sm">
+                Cotizar / Comprar
+            </a>
         </div>
-        
-        <div class="grid">
-            <div>
-                <div class="form-group">
-                    <label id="lblMonto" for="montoPrincipal">Monto Total del Crédito / Valor Inmueble ($ COP)</label>
-                    <input type="number" id="montoPrincipal" value="150000000" step="5000000">
+    </header>
+
+    <!-- Hero Section (Impacto Visual) -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Fondo: Puedes cambiar este placeholder por una foto real de tus velas -->
+        <div class="absolute inset-0 z-0 bg-[url('https://images.unsplash.com/photo-1603006905003-be475563bc59?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center opacity-40"></div>
+        <div class="absolute inset-0 bg-gradient-to-t font-serif from-vila-crema via-transparent to-transparent z-0"></div>
+
+        <div class="relative z-10 max-w-4xl mx-auto text-center px-6 mt-12">
+            <span class="text-xs uppercase tracking-[0.3em] text-vila-acento font-semibold block mb-4">Hecho a mano • Cera de Soya • Diseño</span>
+            <h1 class="font-serif text-5xl md:text-7xl font-light tracking-tight mb-6 leading-tight">
+                Esculpiendo luz, <br><span class="italic font-normal text-vila-acento">despertando sentidos</span>
+            </h1>
+            <p class="text-lg md:text-xl text-vila-oscuro/80 max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                Transformamos espacios a través de velas aromáticas de molde, en recipientes y piezas decorativas artesanales en cemento.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#colecciones" class="bg-vila-oscuro text-vila-crema px-8 py-4 uppercase text-sm tracking-wider font-medium hover:bg-vila-acento transition-all duration-300 rounded-sm shadow-lg">
+                    Explorar Catálogo
+                </a>
+                <a href="#contacto" class="border border-vila-oscuro text-vila-oscuro px-8 py-4 uppercase text-sm tracking-wider font-medium hover:bg-vila-oscuro hover:text-vila-crema transition-all duration-300 rounded-sm">
+                    Pedidos Corporativos / Regalos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Productos / Colecciones -->
+    <section id="colecciones" class="py-24 max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <h2 class="font-serif text-4xl font-light mb-4">Nuestras Creaciones</h2>
+            <div class="h-[1px] w-20 bg-vila-acento mx-auto"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <!-- Tarjeta 1: Velas en Molde -->
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden bg-vila-tierra/20 aspect-[3/4] mb-6 relative">
+                    <img src="https://images.unsplash.com/photo-1602874801007-bd458bb1b8b6?auto=format&fit=crop&w=600&q=80" alt="Velas de Molde" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <h3 class="font-serif text-2xl font-light mb-2">Velas de Molde</h3>
+                <p class="text-sm text-vila-oscuro/70 leading-relaxed">
+                    Esculturas de cera con formas geométricas y orgánicas. El balance perfecto entre arte estético y luz para tus espacios.
+                </p>
+            </div>
+
+            <!-- Tarjeta 2: Velas en Recipientes -->
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden bg-vila-tierra/20 aspect-[3/4] mb-6 relative">
+                    <img src="https://images.unsplash.com/photo-1596433809252-260c2745df6b?auto=format&fit=crop&w=600&q=80" alt="Velas en Recipiente" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <h3 class="font-serif text-2xl font-light mb-2">Velas en Recipiente</h3>
+                <p class="text-sm text-vila-oscuro/70 leading-relaxed">
+                    Aromas premium vertidos en delicados envases diseñados para mantener la fragancia y decorar de forma sutil y elegante.
+                </p>
+            </div>
+
+            <!-- Tarjeta 3: Bandejas en Cemento -->
+            <div class="group cursor-pointer">
+                <div class="overflow-hidden bg-vila-tierra/20 aspect-[3/4] mb-6 relative">
+                    <img src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80" alt="Piezas de Cemento" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                </div>
+                <h3 class="font-serif text-2xl font-light mb-2">Piezas de Cemento</h3>
+                <p class="text-sm text-vila-oscuro/70 leading-relaxed">
+                    Bandejas y bases artesanales texturizadas. El soporte brutalista y moderno ideal para tus velas y joyas.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección de Usos / Propósito (Regalos, Recordatorios, Espacios) -->
+    <section id="usos" class="bg-vila-oscuro text-vila-crema py-24">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div>
+                    <span class="text-xs uppercase tracking-[0.3em] text-vila-tierra font-semibold block mb-4">Hechas para perdurar</span>
+                    <h2 class="font-serif text-4xl md:text-5xl font-light mb-8 leading-tight">El detalle perfecto para cada intención</h2>
+                    
+                    <div class="space-y-8">
+                        <div class="flex gap-4">
+                            <span class="font-serif text-2xl text-vila-tierra italic">01.</span>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Aromatizar Espacios</h4>
+                                <p class="text-vila-crema/70 text-sm">Crea atmósferas de paz, enfoque o relajación en tu hogar u oficina con aceites esenciales seleccionados.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="font-serif text-2xl text-vila-tierra italic">02.</span>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Regalos Consentido</h4>
+                                <p class="text-vila-crema/70 text-sm">Sorprende a quienes amas con un obsequio que combina diseño visual, texturas y una experiencia olfativa única.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <span class="font-serif text-2xl text-vila-tierra italic">03.</span>
+                            <div>
+                                <h4 class="text-lg font-medium mb-1">Recordatorios y Eventos</h4>
+                                <p class="text-vila-crema/70 text-sm">Personalizamos mini velas y bandejas para bodas, bautizos o eventos corporativos. Un recuerdo inolvidable.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group" id="divCuotaInicial">
-                    <label for="cuotaInicial">Cuota Inicial ($ COP)</label>
-                    <input type="number" id="cuotaInicial" value="45000000" step="5000000">
+                <!-- Imagen compuesta interactiva visualmente -->
+                <div class="relative aspect-square bg-vila-tierra/10 p-8 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1572715655204-47e297d3b6dd?auto=format&fit=crop&w=800&q=80')] bg-cover bg-center opacity-60"></div>
+                    <div class="relative bg-vila-crema text-vila-oscuro p-8 max-w-sm text-center shadow-2xl border border-vila-tierra/30">
+                        <p class="font-serif italic text-xl mb-4">"El aroma tiene el poder de revivir momentos que creíamos olvidados."</p>
+                        <p class="text-xs uppercase tracking-widest text-vila-acento font-semibold">— Vila Senses</p>
+                    </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="form-group" id="divAmortizacion">
-                    <label for="tipoSistema">Modalidad de Moneda</label>
-                    <select id="tipoSistema">
-                        <option value="pesos">Pesos Colombianos (Cuota Fija)</option>
-                        <option value="uvr">UVR (Indexado a Inflación / IPC)</option>
+    <!-- El Arte detras / Filosofía -->
+    <section id="nosotros" class="py-24 max-w-7xl mx-auto px-6 text-center">
+        <div class="max-w-3xl mx-auto">
+            <span class="text-xs uppercase tracking-[0.3em] text-vila-acento font-semibold block mb-4">Proceso Honesto</span>
+            <h2 class="font-serif text-4xl font-light mb-6">Cera vegetal y cemento moldeado a mano</h2>
+            <p class="text-vila-oscuro/80 leading-relaxed mb-8">
+                En <strong>Vila Senses</strong> creemos en el lujo consciente. Cada vela es vertida individualmente usando cera de soya 100% biodegradable, libre de crueldad animal. Nuestras bandejas de cemento se sellan minuciosamente para ofrecer durabilidad y una estética limpia e industrial que contrasta hermosamente con la calidez de la llama.
+            </p>
+            <div class="inline-flex gap-8 justify-center text-sm uppercase tracking-wider font-medium text-vila-acento">
+                <span>✓ 100% Cera de Soya</span>
+                <span>✓ Eco-Friendly</span>
+                <span>✓ Hecho en Colombia</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Formulario de Contacto / Conversión -->
+    <section id="contacto" class="py-24 bg-vila-tierra/20 border-t border-vila-tierra/40">
+        <div class="max-w-3xl mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="font-serif text-4xl font-light mb-4">Hagamos algo especial</h2>
+                <p class="text-sm text-vila-oscuro/70">¿Quieres un pedido personalizado, recordatorios para un evento o comprar nuestra colección actual? Escríbenos.</p>
+            </div>
+
+            <form class="space-y-6" onsubmit="event.preventDefault(); alert('¡Gracias por comunicarte con Vila Senses! Te contactaremos pronto.');">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider font-medium mb-2">Nombre Completo</label>
+                        <input type="text" required class="w-full bg-vila-crema border border-vila-tierra p-3 text-sm focus:outline-none focus:border-vila-oscuro transition-colors rounded-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider font-medium mb-2">Correo Electrónico</label>
+                        <input type="email" required class="w-full bg-vila-crema border border-vila-tierra p-3 text-sm focus:outline-none focus:border-vila-oscuro transition-colors rounded-sm">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider font-medium mb-2">¿En qué estás interesado?</label>
+                    <select class="w-full bg-vila-crema border border-vila-tierra p-3 text-sm focus:outline-none focus:border-vila-oscuro transition-colors rounded-sm">
+                        <option>Colección de Velas (Molde / Recipiente)</option>
+                        <option>Piezas y Bandejas de Cemento</option>
+                        <option>Recordatorios para Eventos</option>
+                        <option>Regalos Corporativos</option>
                     </select>
                 </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-wider font-medium mb-2">Cuéntanos tu idea</label>
+                    <textarea rows="4" required class="w-full bg-vila-crema border border-vila-tierra p-3 text-sm focus:outline-none focus:border-vila-oscuro transition-colors rounded-sm" placeholder="Detalla cantidades, aromas de preferencia o fecha de tu evento..."></textarea>
+                </div>
+                <button type="submit" class="w-full bg-vila-oscuro text-vila-crema py-4 uppercase text-sm tracking-wider font-medium hover:bg-vila-acento transition-all duration-300 rounded-sm">
+                    Enviar Solicitud
+                </button>
+            </form>
+        </div>
+    </section>
 
-                <div class="form-group">
-                    <label for="tasaAnual">Tasa de Interés Nominal/Efectiva Propuesta (E.A. %)</label>
-                    <input type="number" id="tasaAnual" value="11.8" step="0.05">
-                </div>
-
-                <div class="form-group">
-                    <label id="lblPlazo" for="plazo">Plazo de Amortización (Meses)</label>
-                    <input type="number" id="plazo" value="180" min="1" max="360">
-                </div>
-
-                <div class="form-group">
-                    <label for="seguroMes">Seguro de Vida Obligatorio + Todo Riesgo Estimado (Mensual $ COP)</label>
-                    <input type="number" id="seguroMes" value="45000" step="5000">
-                </div>
-            </div>
-            
-            <div>
-                <h2 style="font-size: 18px; margin-bottom: 15px; color: #38bdf8;">Análisis Financiero del Escenario</h2>
-                <div class="results-box">
-                    <div class="result-item">
-                        <span class="result-label">Capital Neto a Financiar</span>
-                        <span class="result-value" id="resFinanciar">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Tasa Periódica Mes Vencido (M.V.)</span>
-                        <span class="result-value" id="resTasaMes">0.00%</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Cuota Base (Solo Capital + Interés)</span>
-                        <span class="result-value" id="resCuotaBase">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Seguros Mensuales Adicionados</span>
-                        <span class="result-value" id="resSeguro">$ 0</span>
-                    </div>
-                    <div class="result-item" style="background: rgba(52, 211, 153, 0.05); padding: 10px; border-radius: 6px;">
-                        <span class="result-label" style="color: #34d399; font-weight: 600;">CUOTA MENSUAL TOTAL</span>
-                        <span class="result-value highlight" id="resCuotaTotal">$ 0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="result-label">Costo Total de Intereses Generados</span>
-                        <span class="result-value" id="resIntereses">$ 0</span>
-                    </div>
-                </div>
-                
-                <div class="info-card" id="infoDinamica">
-                    <strong>Análisis del Sistema:</strong> Los créditos hipotecarios en Colombia permiten plazos amplios y tasas competitivas. Recuerde validar si aplica a subsidios del gobierno (Mi Casa Ya / Cobertura FRECH).
-                </div>
+    <!-- Footer -->
+    <footer class="bg-vila-oscuro text-vila-crema/60 py-12 border-t border-vila-crema/10 text-sm">
+        <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="font-serif text-xl tracking-widest uppercase font-semibold text-vila-crema">Vila Senses</div>
+            <p>&copy; 2026 Vila Senses. Todos los derechos reservados. Diseñado con intención.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-vila-crema transition-colors">Instagram</a>
+                <a href="#" class="hover:text-vila-crema transition-colors">WhatsApp</a>
             </div>
         </div>
-    </div>
+    </footer>
 
-    <script>
-        let tipoCreditoActivo = 'hipotecario';
-
-        function cambiarTipo(tipo) {
-            tipoCreditoActivo = tipo;
-            
-            // Actualizar botones de pestañas
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // Modificar visibilidad y valores sugeridos según la modalidad colombiana estándar
-            const divCuotaInicial = document.getElementById('divCuotaInicial');
-            const divAmortizacion = document.getElementById('divAmortizacion');
-            const lblMonto = document.getElementById('lblMonto');
-            const lblPlazo = document.getElementById('lblPlazo');
-            
-            if (tipo === 'hipotecario') {
-                lblMonto.textContent = "Valor del Inmueble ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'block';
-                divAmortizacion.style.display = 'block';
-                document.getElementById('montoPrincipal').value = "150000000";
-                document.getElementById('cuotaInicial').value = "45000000";
-                document.getElementById('tasaAnual').value = "11.5";
-                document.getElementById('plazo').value = "240";
-                document.getElementById('seguroMes').value = "55000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Financiamiento máx del 70% para vivienda NO VIS y 80% para VIS. Estabilidad a largo plazo mediante cuotas fijas en pesos.";
-            } else if (tipo === 'vehiculo') {
-                lblMonto.textContent = "Monto a Financiar el Vehículo ($ COP)";
-                lblPlazo.textContent = "Plazo de Amortización (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "60000000";
-                document.getElementById('tasaAnual').value = "15.5";
-                document.getElementById('plazo').value = "72";
-                document.getElementById('seguroMes').value = "80000"; // Incluye póliza auto todo riesgo endosada
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> El crédito de vehículo suele exigir pignoración del automotor. Las tasas varían si el carro es nuevo o usado.";
-            } else if (tipo === 'libre') {
-                lblMonto.textContent = "Monto del Crédito de Consumo ($ COP)";
-                lblPlazo.textContent = "Plazo Solicitado (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "20000000";
-                document.getElementById('tasaAnual').value = "22.0";
-                document.getElementById('plazo').value = "48";
-                document.getElementById('seguroMes').value = "15000";
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Libre inversión/Consumo. Tasas más elevadas sujetas al perfil de riesgo. Alerta con la tasa de usura fijada por la Superfinanciera.";
-            } else if (tipo === 'tarjeta') {
-                lblMonto.textContent = "Cupo Utilizado / Avance / Compra ($ COP)";
-                lblPlazo.textContent = "Diferido a Cuotas (Meses)";
-                divCuotaInicial.style.display = 'none';
-                divAmortizacion.style.display = 'none';
-                document.getElementById('montoPrincipal').value = "5000000";
-                document.getElementById('tasaAnual').value = "28.5"; // Cercano a la usura habitual de tarjetas
-                document.getElementById('plazo').value = "24";
-                document.getElementById('seguroMes').value = "6000"; // Seguro de cartera común
-                document.getElementById('infoDinamica').innerHTML = "<strong>Análisis del Sistema:</strong> Compras diferidas a 1 sola cuota por lo general no generan intereses corrientes en Colombia. Evite los avances en efectivo debido a su alto costo inmediato.";
-            }
-            
-            calcularTodo();
-        }
-
-        function calcularTodo() {
-            const montoPrincipal = parseFloat(document.getElementById('montoPrincipal').value) || 0;
-            const cuotaInicial = tipoCreditoActivo === 'hipotecario' ? (parseFloat(document.getElementById('cuotaInicial').value) || 0) : 0;
-            const tasaAnual = parseFloat(document.getElementById('tasaAnual').value) || 0;
-            const plazo = parseInt(document.getElementById('plazo').value) || 0;
-            const seguroMes = parseFloat(document.getElementById('seguroMes').value) || 0;
-
-            const capitalFinanciar = montoPrincipal - cuotaInicial;
-            document.getElementById('resFinanciar').textContent = '$ ' + capitalFinanciar.toLocaleString('es-CO');
-
-            if (capitalFinanciar <= 0 || plazo <= 0 || tasaAnual <= 0) {
-                document.getElementById('resCuotaBase').textContent = "$ 0";
-                document.getElementById('resCuotaTotal').textContent = "$ 0";
-                document.getElementById('resIntereses').textContent = "$ 0";
-                return;
-            }
-
-            // Convertir de Efectiva Anual (E.A) a Mensual Vencida (M.V)
-            const tasaMensual = Math.pow(1 + (tasaAnual / 100), 1 / 12) - 1;
-            document.getElementById('resTasaMes').textContent = (tasaMensual * 100).toFixed(2) + '%';
-
-            // Cálculo de la cuota base usando amortización constante (sistema francés)
-            const cuotaBase = (capitalFinanciar * tasaMensual) / (1 - Math.pow(1 + tasaMensual, -plazo));
-            const cuotaTotal = cuotaBase + seguroMes;
-            const totalIntereses = (cuotaBase * plazo) - capitalFinanciar;
-
-            document.getElementById('resCuotaBase').textContent = '$ ' + Math.round(cuotaBase).toLocaleString('es-CO');
-            document.getElementById('resSeguro').textContent = '$ ' + Math.round(seguroMes).toLocaleString('es-CO');
-            document.getElementById('resCuotaTotal').textContent = '$ ' + Math.round(cuotaTotal).toLocaleString('es-CO');
-            document.getElementById('resIntereses').textContent = '$ ' + Math.round(totalIntereses).toLocaleString('es-CO');
-        }
-
-        // Listener para recálculo dinámico en cualquier interacción
-        document.querySelectorAll('input, select').forEach(element => {
-            element.addEventListener('input', calcularTodo);
-        });
-
-        // Inicialización en la carga original
-        calcularTodo();
-    </script>
 </body>
 </html>
